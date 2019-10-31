@@ -1,0 +1,158 @@
+### Stats with R Exercise sheet 1 
+
+## This exercise sheet contains the exercises that you will need to complete and 
+## submit by 23:55 on Monday, November 4. Write the code below the questions. 
+## If you need to provide a written answer, comment this out using a hashtag (#). 
+## Submit your homework via moodle.
+## You are required to work together in groups of three students, but everybody 
+## needs to submit the group version of the homework via moodle individually.
+## You need to provide a serious attempt at solving each exercise in order to have
+## the assignment graded as complete. 
+
+## Please write below your (and your teammates') name and matriculation number. 
+## Anar Amirli 2581604, Madhumitha Mohanram 2579667, Ga Yeon Roﬂ 2568941
+
+## Change the name of the file by adding your matriculation numbers
+## (sheet01_firstID_secondID_thirdID.R)
+
+
+
+## Many of the things on this exercise sheet have not been discussed in class. 
+## The answers will therefore not be on  the slides. You are expected to find 
+## the answers using the help function in R, in the textbooks and online. If you 
+## get stuck on these exercises, remember: Google is your friend.
+## If you have any questions, you can ask these during the tutorial, or use the 
+## moodle discussion board for the course.
+
+###############
+### Exercise 1: Getting started
+###############
+## a) Look at your current working directory.
+getwd()
+##Output[1] "C:/Users/firem/Desktop
+
+## b) Get help with this function.
+help(getwd)
+
+## c) Change your working directory to another directory.
+setwd("C:\Users\StatR")
+
+
+###############
+### Exercise 2: Participants' age & boxplots
+###############
+## In this exercise, we will deal with data from a package.
+
+## a) Install the package "languageR" and load it.
+install.packages("languageR")
+require(languageR)
+library(languageR)
+
+## b) Specifically, we will deal with the dataset 'dutchSpeakersDistMeta'. 
+##    This dataset should be available to you once you've loaded languageR.
+##    The dataset contains information on the speakers included in the Spoken 
+##    Dutch Corpus. Inspect 'dutchSpeakersDistMeta'. Look at the head, tail, 
+##    and summary. What do head and tail show you?
+
+##  The head command shows the top 6 entries in the Dataset.
+##  The tail command shows the last 6 entries in the Dataset.
+
+head(dutchSpeakersDistMeta)
+##OUTPUT[2B]:head
+#      Speaker    Sex AgeYear  AgeGroup ConversationType EduLevel
+# 410   N01001 female    1952 age45to55             <NA>     high
+# 409   N01002   male    1952 age45to55       maleFemale     high
+# 1157  N01003   male    1949 age45to55       maleFemale     high
+# 252   N01004 female    1971 age25to34             <NA>     high
+# 251   N01005 female    1944   age56up       femaleOnly      mid
+# 254   N01006   male    1969 age25to34       maleFemale     high
+
+tail(dutchSpeakersDistMeta)
+##OUTPUT[2B]:TAIL
+#      Speaker    Sex AgeYear  AgeGroup ConversationType EduLevel
+# 163   N01216   male    1981 age18to24             <NA>      mid
+# 162   N01217   male    1976 age25to34             <NA>      mid
+# 164   N01218 female    1980 age18to24       maleFemale     high
+# 1049  N01219   male    1980 age18to24             <NA>      mid
+# 1051  N01220 female    1955 age35to44             <NA>      mid
+# 1050  N01221 female    1983 age18to24       maleFemale     high
+
+summary(dutchSpeakersDistMeta)
+##OUTPUT[2B]:summary
+# Speaker        Sex        AgeYear          AgeGroup    ConversationType EduLevel  
+# N01001 :  1   female:90   Min.   :1923   age18to24:71   femaleOnly:26      high:117  
+# N01002 :  1   male  :73   1st Qu.:1956   age25to34:38   maleFemale:55      low :  1  
+# N01003 :  1   NA's  : 2   Median :1974   age35to44:12   maleOnly  :10      mid : 44  
+# N01004 :  1               Mean   :1967   age45to55:20   NA's      :74      NA's:  3  
+# N01005 :  1               3rd Qu.:1979   age56up  :22                                
+# (Other):158               Max.   :1987   NA's     : 2                                
+# NA's   :  2               NA's   :2 
+
+
+## c) Each line in this file provides information on a single speaker. How many 
+##    speakers are included in this dataset? In other words, use a function to 
+##    retrieve the number of rows for this dataset.
+## There are 165 speakers included in the dataset
+nrow(dutchSpeakersDistMeta)
+##OUTPUT[2C]:nrow : [1] 165
+
+
+
+## d) Let's say we're interested in the age of the speakers included in the 
+##    corpus, to see whether males and females are distributed equally. 
+##    Create a boxplot for Sex and AgeYear.
+boxplot(dutchSpeakersDistMeta$AgeYear~dutchSpeakersDistMeta$Sex, main=toupper("BoxPlot for Sex and AgeYear"),col=c("red","Yellow"))
+##OUTPUT[2D]:boxplot for for Sex(red for women,yellow for men) and AgeYear
+
+## e) Does it seem as if either of the two groups has more variability in age?
+## Yes we have more variability in age of female than age of males as the red box denoting them has more coverage than yellow box denoting males
+data <- dutchSpeakersDistMeta[,c("AgeYear", "Sex")] 
+## f) Do you see any outliers in either of the two groups?
+## From the plot,it is observed that there are 2 outliers in group of males slightly prior and after 1930
+
+## g) Now calculate the mean and standard deviation of the AgeYear per group. 
+##    Do this by creating a subset for each group.
+data <- dutchSpeakersDistMeta[,c("AgeYear", "Sex")]
+
+##  Mean of Age Year  for females
+
+FemaleAgegrp<- subset(data, Sex =='female')
+fMean <- tapply(FemaleAgegrp$AgeYear,FemaleAgegrp$Sex, mean)
+fMean
+
+##OUTPUT[2g]:Mean of Age Year  for females
+##female     male
+##1966.889     NA
+
+##  Mean of Age Year  for males
+
+MaleAgegrp<- subset(data, Sex =='male')
+mMean <- tapply(MaleAgegrp$AgeYear,MaleAgegrp$Sex, mean)
+mMean
+
+##OUTPUT[2g]:Mean of Age Year  for males
+##female     male
+##NA         1967.301
+
+## Standard Deviation for females over AgeYear
+
+FstdDev<- tapply(FemaleAgegrp$AgeYear,FemaleAgegrp$Sex, sd)
+FstdDev  
+##Output: 
+##  female     male 
+##  15.87411    NA 
+
+## Standard Deviation for males over AgeYear
+
+MstdDev<- tapply(MaleAgegrp$AgeYear,MaleAgegrp$Sex, sd)
+MstdDev  
+##Output: 
+##  female     male 
+##   NA        14.66258 
+
+
+
+## h) What do the whiskers of a boxplot mean?
+##The two horizontal lines above and below the actual plot which denotes the extreme 0f data(highest and lowest observations) are called as whiskers. And the points beyond those whiskers are plotted as outliers.
+
+
