@@ -156,3 +156,73 @@ MstdDev
 ##The two horizontal lines above and below the actual plot which denotes the extreme 0f data(highest and lowest observations) are called as whiskers. And the points beyond those whiskers are plotted as outliers.
 
 
+###############
+### Exercise 3: Children's stories & dataframes
+###############
+# A researcher is interested in the way children tell stories. More specifically,
+# she wants to know how often children use 'and then'. She asks 25 children to
+# tell her a story, and counts the number of times they use 'and then'.
+# The data follow:
+
+# 18 15 22 19 18 17 18 20 17 12 16 16 17 21 25 18 20 21 20 20 15 18 17 19 20 
+
+
+## a) What measurement scale is this data? Is it discrete or continuous? Explain
+##    in one sentence why? (remember, comment out written answers)
+
+#Answer: It is discrete measurement because e.g. there exists no value between 16 and 17. 
+
+
+## b) In the next questions (c-e), you will create a dataframe of this data, 
+##    which will also include participant IDs.
+##    Why is a dataframe better suited to store this data than a matrix?
+
+# Answer: Dataframe is better if you want to store data of different classes.
+
+## c) First create a vector with participant IDs. Your vector should be named 
+##    'pps', and your participants should be labeled from 1 to 25
+
+pps <- c(1:25)
+
+## d) Next, create a vector containing all the observations. Name this vector 'obs'.
+
+obs <- c(18, 15, 22, 19, 18, 17, 18, 20, 17, 12, 16, 16, 17, 21, 25, 18, 20, 21, 20, 20, 15, 18, 17, 19, 20)
+
+## e) Create a dataframe for this data. Assign this to 'stories'. 
+
+stories <- data.frame(pps, obs)
+stories
+
+## f) Take a look at the summary of your dataframe, and at the classes of your 
+##    columns. What class is the variable 'pps'?
+
+# Answer: Numeric.
+
+## g) Change the class of 'pps' to factor. Why is factor a better class for this
+##    variable?
+
+stories$pps <- factor(stories$pps)
+#Answer: We make sure that the values of pps are categorial variables wich cannot be ordered like integers.
+
+## h) Plot a histogram (using hist()) for these data. Set the number of breaks 
+##    to 8.
+
+hist(stories$obs, breaks=8)
+
+## i) Create a kernel density plot using density().
+
+plot(density(stories$obs))
+
+## j) What is the difference between a histogram and a kernel density plot?
+
+# Answer: A density plot shows smooth distribution in a continous interval. 
+# With a clear shape we see where the values are most concentrated at one glance. 
+# A histogram helps to inspect exact values of each variable. 
+
+## This is a difficult one, remember you just need to provide a serious attempt at solving each 
+## exercise in order to pass. 
+## k) Overlay the histogram with the kernel density plot 
+##    (hint: the area under the curve should be equal for overlaying the graphs 
+##    correctly.)
+
+lines(density(stories$obs, adjust = 2), col="red")
