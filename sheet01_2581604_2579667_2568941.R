@@ -117,38 +117,42 @@ data <- dutchSpeakersDistMeta[,c("AgeYear", "Sex")]
 ##  Mean of Age Year  for females
 
 FemaleAgegrp<- subset(data, Sex =='female')
+FemaleAgegrp$Sex <- droplevels(FemaleAgegrp$Sex) # drop the unused level
+
 fMean <- tapply(FemaleAgegrp$AgeYear,FemaleAgegrp$Sex, mean)
 fMean
 
 ##OUTPUT[2g]:Mean of Age Year  for females
-##female     male
-##1966.889     NA
+##  female
+##  1966.889
 
 ##  Mean of Age Year  for males
 
 MaleAgegrp<- subset(data, Sex =='male')
+MaleAgegrp$Sex <- droplevels(MaleAgegrp$Sex) # drop the unused level
+
 mMean <- tapply(MaleAgegrp$AgeYear,MaleAgegrp$Sex, mean)
 mMean
 
 ##OUTPUT[2g]:Mean of Age Year  for males
-##female     male
-##NA         1967.301
+##  male
+##  1967.301
 
 ## Standard Deviation for females over AgeYear
 
 FstdDev<- tapply(FemaleAgegrp$AgeYear,FemaleAgegrp$Sex, sd)
 FstdDev  
 ##Output: 
-##  female     male 
-##  15.87411    NA 
+##  femal
+##  15.87411
 
 ## Standard Deviation for males over AgeYear
 
 MstdDev<- tapply(MaleAgegrp$AgeYear,MaleAgegrp$Sex, sd)
 MstdDev  
 ##Output: 
-##  female     male 
-##   NA        14.66258 
+##  male 
+##  14.66258 
 
 
 
