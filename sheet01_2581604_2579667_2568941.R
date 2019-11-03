@@ -226,3 +226,90 @@ plot(density(stories$obs))
 ##    correctly.)
 
 lines(density(stories$obs, adjust = 2), col="red")
+
+
+###############
+### Exercise 4: Normal distributions
+###############
+## In this exercise, we will plot normal distributions.
+
+## a) First, use seq() (?seq) to select the x-values to plot the range for
+##    (will become the x-axis in the plot).
+##    Get R to generate the range from -5 to 5, by 0.1. Assign this to the 
+##    variable x.
+
+x <- seq(from=-5, to=5, by=0.1)
+
+
+## b) Now we need to obtain the y-values of the plot (the density). We do this 
+##    using the density function for the normal distribution. 
+##    Use "help(dnorm)" to find out about the standard functions for the normal 
+##    distribution.
+
+
+y<-dnorm(x, mean=mean(x),sd=sd(x))
+plot(y)
+
+
+
+## c) Now use plot() to plot the normal distribution for z values of "x". 
+
+plot(x, y, xlab="x value", ylab="Density", main="normal distribution for z values of x")
+
+
+## d) The plot now has a relatively short y-range, and it contains circles 
+##    instead of a line. 
+##    Using plot(), specify the y axis to range from 0 to 0.8, and plot a line 
+##    instead of the circles.
+
+plot(x, y, ylim=c(0, 0.8), type="l",  xlab="x value", ylab="Density", main="normal distribution for z values of x")
+
+## e) We want to have a vertical line to represent the mean of our distribution.
+##    'abline()' can do this for us. Look up help for abline(). 
+##    Use abline() to create the vertical line. Specify the median of x using
+##    the argument 'v'.
+##    In order to get a dashed line, set the argument 'lty' to 2.
+
+abline(v=mean(x), col="red", lty=2)
+
+
+## f) Take a look at the beaver1 dataset. (You can see it by typing "beaver1".) 
+##    Then select only the temperature part and store it in a variable "b1temp".
+
+b1temp <- beaver1[, "temp"]
+
+## g) Calculate the mean and standard deviation of this dataset and plot a normal
+##    distribution with these parameters.
+
+b1temp_mean <- mean(b1temp)
+b1temp_sd <- sd(b1temp)
+
+plot(b1temp, dnorm(b1temp, mean=b1temp_mean, sd=b1temp_sd), xlab="temp", ylab="density", type="l", main="normal distribution")
+
+
+## h) We observe two temparatures (36.91 and 38.13). What's the likelihood that
+##    these temperatures (or more extreme ones) respectively come 
+##    from the normal distribution from g)?
+
+# P(temp<=36.91)
+round(pnorm(q=36.91, mean=b1temp_mean, sd=b1temp_sd, lower.tail = TRUE), 4)
+# [1] 0.5976
+
+# P(temp>=38.13)
+round(pnorm(q=38.13, mean=b1temp_mean, sd=b1temp_sd, lower.tail = FALSE), 4)
+# [1] 0
+
+## i) Use the random sampling function in R to generate 20 random samples from
+##    the normal distribution from g), and draw a histogram based on this sample.
+##    Repeat 5 times. What do you observe?
+
+for (i in 0:5){
+  
+  random_samples<-rnorm(n=20,m=b1temp_mean,sd=b1temp_sd)
+  hist(random_samples,
+       main=paste("Histogram of random sample", i))
+}
+
+# Histograms mostly didn't do well on interpreting the denisty distribution
+# from g. It showed rather random trends than the normal distribution. 
+# There were significant variations in the distribution of the histograms.
