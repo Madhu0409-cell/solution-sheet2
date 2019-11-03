@@ -219,7 +219,7 @@ plot(density(stories$obs))
 
 ## j) What is the difference between a histogram and a kernel density plot?
 
-# Answer: A density plot shows smooth distribution in a continous interval. 
+# Answer: A density plot shows smooth distribution in a continous interval.
 # With a clear shape we see where the values are most concentrated at one glance. 
 # A histogram helps to inspect exact values of each variable. 
 
@@ -297,11 +297,11 @@ plot(b1temp, dnorm(b1temp, mean=b1temp_mean, sd=b1temp_sd), xlab="temp", ylab="d
 
 # P(temp<=36.91)
 round(pnorm(q=36.91, mean=b1temp_mean, sd=b1temp_sd, lower.tail = TRUE), 4)
-# [1] 0.5976
+# output: 0.5976
 
 # P(temp>=38.13)
 round(pnorm(q=38.13, mean=b1temp_mean, sd=b1temp_sd, lower.tail = FALSE), 4)
-# [1] 0
+# output: 0
 
 ## i) Use the random sampling function in R to generate 20 random samples from
 ##    the normal distribution from g), and draw a histogram based on this sample.
@@ -314,6 +314,6 @@ for (i in 0:5){
        main=paste("Histogram of random sample", i))
 }
 
-# Histograms mostly didn't do well on interpreting the denisty distribution
+# Answer: Histograms mostly didn't do well on interpreting the denisty distribution
 # from g. It showed rather random trends than the normal distribution. 
 # There were significant variations in the distribution of the histograms.
