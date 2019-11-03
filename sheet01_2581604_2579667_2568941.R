@@ -280,7 +280,7 @@ plot(x, y, ylim=c(0, 0.8), type="l",  xlab="x value", ylab="Density", main="norm
 ##    the argument 'v'.
 ##    In order to get a dashed line, set the argument 'lty' to 2.
 
-abline(v=mean(x), col="red", lty=2)
+abline(v=c(mean(x), median(x)), col=c("blue", "red"), lty=2)
 
 
 ## f) Take a look at the beaver1 dataset. (You can see it by typing "beaver1".) 
