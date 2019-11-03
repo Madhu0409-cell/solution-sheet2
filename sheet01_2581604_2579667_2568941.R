@@ -229,7 +229,13 @@ plot(density(stories$obs))
 ##    (hint: the area under the curve should be equal for overlaying the graphs 
 ##    correctly.)
 
-lines(density(stories$obs, adjust = 2), col="red")
+hist(stories$obs, 
+     breaks=8, 
+     prob= TRUE, 
+     col= "gray")
+
+
+lines(density(stories$obs), col="red")
 
 
 ###############
