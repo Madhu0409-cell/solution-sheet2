@@ -318,6 +318,7 @@ for (i in 0:5){
   random_samples<-rnorm(n=20,m=b1temp_mean,sd=b1temp_sd)
   hist(random_samples,
        main=paste("Histogram of random sample", i))
+  
 }
 
 # Answer: Histograms mostly didn't do well on interpreting the denisty distribution
