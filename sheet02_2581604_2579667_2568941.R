@@ -10,7 +10,6 @@
 ## You need to provide a serious attempt to each exercise in order to have
 ## the assignment graded as complete. 
 
-
 # 1. Download the data file "digsym.csv" from the moodle and save it in your working directory. 
 install.packages("rstudioapi")
 currentwd <- dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -43,42 +42,54 @@ is.na(dat)
 
 # 8. Get rid of the row number column.
 row.names(dat) <- NULL
+head(dat)
 
 # 9. Put the Sub_Age column second.
 dat <- dat[, c(1, 11, 2:10)]
 
+
 # 10. Replace the values of the "ExperimentName" column with something shorter, more legible.
+dat$ExperimentName <- as.factor(str_replace(dat$ExperimentName,"Digit Symbol - Kopie","Dsk"))
 
 
 # 11. Keep only experimental trials (encoded as "Trial:2" in List), get rid of practice trials 
 # (encoded as "Trial:1"). When you do this, assign the subset of the data to a variable "data2", 
 # then assign data2 to dat and finally remove data2.
-
+data2 <- subset(dat, List == "Trial:2")
+dat <- data2
+rm(data2)
 
 # 12. Separate Sub_Age column to two columns, "Subject" and "Age", using the function "separate".
-
+dat <- separate(dat,col=Sub_Age,into = c("Subject","Age"),sep=" _ ")
+dat
 
 # 13. Make subject a factor.
-
+dat$Subject <- as.factor(dat$Subject)
+dat
 
 # 14. Extract experimental condition ("right" vs. "wrong") from the "File" column:
 # i.e. we want to get rid of digit underscore before and the digit after the "right" and "wrong".
 
-
+dat <- as.factor(separate(dat, col = File, into = c("file","condition" ), sep = "_"))
+dat
 
 # 15. Using str_pad to make values in the File column 8 chars long, by putting 0 at the end  (i.e., 
-# same number of characters, such that "1_right" should be replaced by "1_right0" etc).
-
+# same number of+ characters, such that "1_right" should be replaced by "1_right0" etc).
+dat$File <- str_pad(dat$File,width=8,side="right",pad="0")
+dat
 
 # 16. Remove the column "List".
-
+dat$List <- NULL
+dat
 
 # 17. Change the data type of "Age" to integer.
-
+f <- factor(c("Age"))
+as.numeric(f)
 
 # 18. Missing values, outliers:
 # Do we have any NAs in the data, and if so, how many and where are they?
-
+is.na(dat)
+# We find  no missing values in the Output.
 
 # 19. Create an "accuracy" column using ifelse-statement.
 # If actual response (StimulDS1.RESP) is the same as the correct response (StimulDS1.CRESP), put 
@@ -148,3 +159,5 @@ dat <- dat[, c(1, 11, 2:10)]
 
 # 35. Congrats! Your data are now ready for analysis. Please save the data frame you created 
 # into a new file called "digsym_clean.csv".
+
+
