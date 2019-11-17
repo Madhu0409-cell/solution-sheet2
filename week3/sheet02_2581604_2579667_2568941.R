@@ -37,8 +37,9 @@ head(dat, 20)
 tail(dat, 20)
 
 # 7. Is there any missing data in any of the columns?
-# Answer: Yes, for example in StimulDS1.RT
+any(is.na(dat)) # shows us if there is any missing data
 is.na(dat)
+# Answer: Yes, for example in StimulDS1.RT
 
 # 8. Get rid of the row number column.
 row.names(dat) <- NULL
@@ -46,7 +47,6 @@ head(dat)
 
 # 9. Put the Sub_Age column second.
 dat <- dat[, c(1, 11, 2:10)]
-
 
 # 10. Replace the values of the "ExperimentName" column with something shorter, more legible.
 dat$ExperimentName <- as.factor(str_replace(dat$ExperimentName,"Digit Symbol - Kopie","Dsk"))
@@ -63,6 +63,8 @@ rm(data2)
 dat <- separate(dat,col=Sub_Age,into = c("Subject","Age"),sep=" _ ")
 dat
 
+
+
 # 13. Make subject a factor.
 dat$Subject <- as.factor(dat$Subject)
 dat
@@ -70,8 +72,9 @@ dat
 # 14. Extract experimental condition ("right" vs. "wrong") from the "File" column:
 # i.e. we want to get rid of digit underscore before and the digit after the "right" and "wrong".
 
-dat <- as.factor(separate(dat, col = File, into = c("file","condition" ), sep = "_"))
+dat <- separate(dat, col = File, into = c("file","condition" ), sep = "_")
 dat
+
 
 # 15. Using str_pad to make values in the File column 8 chars long, by putting 0 at the end  (i.e., 
 # same number of+ characters, such that "1_right" should be replaced by "1_right0" etc).
@@ -83,45 +86,100 @@ dat$List <- NULL
 dat
 
 # 17. Change the data type of "Age" to integer.
-f <- factor(c("Age"))
-as.numeric(f)
+dat$Age  <- as.integer(dat$Age)
+str(dat)
+
 
 # 18. Missing values, outliers:
 # Do we have any NAs in the data, and if so, how many and where are they?
-is.na(dat)
+
+any(is.na(dat)) # check if there is any NAs
+sum(is.na(dat)) # if there is, how many
+complete.cases(dat) # where are they: find rows with no missing values
+
 # We find  no missing values in the Output.
 
 # 19. Create an "accuracy" column using ifelse-statement.
 # If actual response (StimulDS1.RESP) is the same as the correct response (StimulDS1.CRESP), put 
 # in value 1, otherwise put 0.
 
+# def function for defining corret response
+my_function <- function(i, data_df=dat){
+  if (data_df[i, "StimulDS1.RESP"]==data_df[i, "StimulDS1.CRESP"]){
+    return(1)
+  } else {
+    return(0)
+  }
+}
+
+# create accruacy
+accuracy <- c()
+for (i in 1:nrow(dat)){
+  accuracy[i]<-my_function(i, dat)
+}
+
+# add new column to dataframe
+dat <- cbind(dat, accuracy) 
+
+head(dat)
+
+
 
 # 20. How many wrong answers do we have in total?
-
+sum(dat$accuracy)
+# answer: 3145
 
 # 21. What's the percentage of wrong responses?
-
+100*sum(dat$accuracy)/length(dat$accuracy)
+# answer: 94.44444
 
 
 # 22. Create a subset "correctResponses" that only contains those data points where subjects 
 # responded correctly. 
+correctResponses <- dat %>% 
+  subset(accuracy == 1)
+
+head(correctResponses)
 
 
 
 # 23. Create a boxplot of StimulDS1.RT - any outliers?
 
+# answer: outliner can be observed. Mean of the distribution lies around 1000, 
+# distribution's right tail ends around 5000, however there a single point which lies around 14000. 
+# Given how this data point significantly differs from the rest, it is clearly an outliner.
+
+boxplot(dat$StimulDS1.RT, horizontal = TRUE)
+
 
 # 24. Create a histogram of StimulDS1.RT with bins set to 50.
+hist(dat$StimulDS1.RT, col = 'skyblue3', breaks = 50)
 
 
 # 25. Describe the two plots - any tails? any suspiciously large values?
 
+# answer: in both plots, we can see that there is one outliner on the right side which is 
+# located far away from the general data distribution.
+
 
 # 26. View summary of correct_RT.
+
+summary(dat$StimulDS1.RT)
+
+# output
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 486     894    1091    1219    1399   13852 
 
 
 # 27. There is a single very far outlier. Remove it and save the result in a new dataframe named 
 # "cleaned".
+
+cleaned <- dat[dat$StimulDS1.RT < max(dat$StimulDS1.RT), ]
+summary(cleaned$StimulDS1.RT)
+
+# output:
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 486     894    1091    1215    1399    7902 
 
 
 ## EXTRA Exercises:
